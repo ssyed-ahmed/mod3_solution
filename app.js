@@ -3,7 +3,20 @@
 
   angular.module('NarrowItDownApp', [])
     .controller('NarrowItDownController', NarrowItDownController)
-    .service('MenuSearchService', MenuSearchService);
+    .service('MenuSearchService', MenuSearchService)
+    .directive('foundItems', FoundItems);
+
+  function FoundItems() {
+    var ddo = {
+      restrict: 'E',
+      templateUrl: 'searchResults.html',
+      controller: NarrowItDownController,
+      controllerAs: 'search',
+      bindToController: true
+    };
+
+    return ddo;
+  }
 
   NarrowItDownController.$inject = ['MenuSearchService', '$q'];
   function NarrowItDownController(MenuSearchService, $q) {
@@ -11,16 +24,20 @@
 
       search.searchTerm;
 
+      search.foundItems = [];
+
       search.getMatchedMenuItems = function(searchTerm) {
         var deferred = $q.defer();
         var promise = MenuSearchService.getMatchedMenuItems(searchTerm);
         promise.then(function(result) {
           var items = result;
-          $q.resolve(items);
-          return items;
+          deferred.resolve(items);
+          search.foundItems = items;
+          return search.foundItems;
         },
         function(error) {
           console.log("Error while fetching menu items.", error);
+          deferred.reject();
         });
         return deferred.promise;
       }
@@ -47,7 +64,7 @@
             return foundItems;
         },
         function(error) {
-          console.log("Error while fetching menu items.", error);
+          throw new Error("Error while fetching menu items.", error);
         });
     };
   }

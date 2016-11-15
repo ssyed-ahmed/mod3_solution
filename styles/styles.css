@@ -50,3 +50,14 @@ input[type="text"] {
     transform: rotate(360deg);
   }
 }
+.myTable {
+  margin-top: 5px;
+  padding-top: 5px;
+  border: 1px solid #dddddd;
+  clear: both;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
