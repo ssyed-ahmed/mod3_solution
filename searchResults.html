@@ -1,7 +1,7 @@
 <div style="clear:both" ng-show="itemsList.nothingFound">
   Nothing found!
 </div>
-<div ng-if="itemsList.foundItems.length > 0">
+<div ng-hide="itemsList.foundItems.length === 0">
   <table class="table table-hover">
     <tr>
       <th>

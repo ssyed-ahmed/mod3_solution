@@ -42,6 +42,11 @@
       search.nothingFound = false;
 
       search.getMatchedMenuItems = function(searchTerm) {
+        if (searchTerm === "" || (searchTerm !== undefined && searchTerm.length === 0)) {
+          search.nothingFound = true;
+          search.foundItems = [];
+          return;
+        }
         var deferred = $q.defer();
         var promise = MenuSearchService.getMatchedMenuItems(searchTerm);
         promise.then(function(result) {
