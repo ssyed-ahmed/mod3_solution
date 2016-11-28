@@ -1,4 +1,7 @@
-<div class="">
+<div style="clear:both" ng-show="itemsList.nothingFound">
+  Nothing found!
+</div>
+<div ng-if="itemsList.foundItems.length > 0">
   <table class="table table-hover">
     <tr>
       <th>
@@ -13,20 +16,29 @@
       <th>
         Description
       </th>
+      <th>
+        Remove
+      </th>
     </tr>
-    <tr ng-repeat="item in search.foundItems">
+    <tr ng-repeat="foundItem in itemsList.foundItems">
       <td>
         {{ $index + 1 }}
       </td>
       <td>
-        {{ item.name }}
+        {{ foundItem.name }}
       </td>
       <td>
-        {{ item.short_name }}
+        {{ foundItem.short_name }}
       </td>
       <td>
-        {{ item.description }}
+        {{ foundItem.description }}
+      </td>
+      <td>
+        <button class="btn btn-danger" ng-click="dirSearch.remove({index: $index})"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Don't want this one!</button>
       </td>
     </tr>
   </table>
+</div>
+<div class="error">
+  Nothing found
 </div>

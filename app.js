@@ -10,12 +10,25 @@
     var ddo = {
       restrict: 'E',
       templateUrl: 'searchResults.html',
-      controller: NarrowItDownController,
-      controllerAs: 'search',
-      bindToController: true
+      scope: {
+        itemsList: '=myItemsList'
+        // onRemove: '&'
+      }
+      //controller: NarrowItDownDirectveController,
+      //controllerAs: 'dirSearch',
+      //bindToController: true
     };
 
     return ddo;
+  }
+
+  function NarrowItDownDirectveController() {
+    var dirSearch = this;
+
+    dirSearch.remove = function(myIndex) {
+      dirSearch.onRemove({index: myIndex});
+    }
+
   }
 
   NarrowItDownController.$inject = ['MenuSearchService', '$q'];
@@ -26,6 +39,8 @@
 
       search.foundItems = [];
 
+      search.nothingFound = false;
+
       search.getMatchedMenuItems = function(searchTerm) {
         var deferred = $q.defer();
         var promise = MenuSearchService.getMatchedMenuItems(searchTerm);
@@ -33,6 +48,11 @@
           var items = result;
           deferred.resolve(items);
           search.foundItems = items;
+          if (search.foundItems.length === 0) {
+            search.nothingFound = true;
+          } else {
+            search.nothingFound = false;
+          }
           return search.foundItems;
         },
         function(error) {
@@ -40,8 +60,11 @@
           deferred.reject();
         });
         return deferred.promise;
-      }
+      };
 
+      search.removeItem = function(index) {
+        search.foundItems.splice(index, 1);
+      };
   }
 
   MenuSearchService.$inject = ['$http'];
